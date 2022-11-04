@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace GildedRose.Console;
 
 public class UpdateQualityService
@@ -37,7 +35,7 @@ public class UpdateQualityService
             {
                 if (item.Name != "Sulfuras, Hand of Ragnaros")
                 {
-                    item.Quality = item.Quality - 1;
+                    DegradeQuality(item);
                 }
             }
         }
@@ -57,7 +55,7 @@ public class UpdateQualityService
                     {
                         if (item.Name != "Sulfuras, Hand of Ragnaros")
                         {
-                            item.Quality = item.Quality - 1;
+                            DegradeQuality(item);
                         }
                     }
                 }
@@ -79,5 +77,10 @@ public class UpdateQualityService
         {
             item.Quality = item.Quality + 1;
         }
+    }
+
+    private static void DegradeQuality(Item item)
+    {
+        item.Quality = item.Quality - 1;
     }
 }
