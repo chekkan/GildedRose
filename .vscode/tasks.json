@@ -43,11 +43,11 @@
             "type": "process",
             "args": [
                 "test",
-                "--logger \"console;verbosity=detailed\"",
-                "--collect \"Code Coverage\"",
+                "${workspaceFolder}/src/GildedRose.Tests/GildedRose.Tests.csproj",
+                "/p:CollectCoverage=true",
                 "/p:CoverletOutputFormat=lcov",
-                "/p:CoverletOutput=./lcov.info",
-                "${workspaceFolder}/src/GildedRose.Tests/GildedRose.Tests.csproj"
+                "/p:CoverletOutput=./coverage/lcov.info",
+
             ],
             "problemMatcher": "$msCompile",
             "group": {
