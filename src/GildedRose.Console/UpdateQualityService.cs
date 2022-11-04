@@ -22,7 +22,7 @@ public class UpdateQualityService
 
                 if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
                 {
-                    if (item.SellIn < 11)
+                    if (item.SellIn <= 10)
                     {
                         if (item.Quality < 50)
                         {
@@ -30,7 +30,7 @@ public class UpdateQualityService
                         }
                     }
 
-                    if (item.SellIn < 6)
+                    if (item.SellIn <= 5)
                     {
                         if (item.Quality < 50)
                         {
