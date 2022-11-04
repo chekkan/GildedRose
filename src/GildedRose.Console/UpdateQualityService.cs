@@ -44,7 +44,11 @@ public class UpdateQualityService
 
         if (item.SellIn < 0)
         {
-            if (item.Name != "Aged Brie")
+            if (item.Name == "Aged Brie")
+            {
+                IncreaseQuality(item);
+            }
+            else
             {
                 if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
                 {
@@ -57,10 +61,6 @@ public class UpdateQualityService
                 {
                     item.Quality = item.Quality - item.Quality;
                 }
-            }
-            else
-            {
-                IncreaseQuality(item);
             }
         }
     }
