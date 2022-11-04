@@ -16,21 +16,18 @@ public class UpdateQualityService
     {
         if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
         {
-            if (item.Quality < 50)
+            IncreaseQuality(item);
+
+            if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
             {
-                item.Quality = item.Quality + 1;
-
-                if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                if (item.SellIn <= 10)
                 {
-                    if (item.SellIn <= 10)
-                    {
-                        IncreaseQuality(item);
-                    }
+                    IncreaseQuality(item);
+                }
 
-                    if (item.SellIn <= 5)
-                    {
-                        IncreaseQuality(item);
-                    }
+                if (item.SellIn <= 5)
+                {
+                    IncreaseQuality(item);
                 }
             }
         }
