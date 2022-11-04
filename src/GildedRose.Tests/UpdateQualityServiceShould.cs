@@ -18,12 +18,12 @@ public class UpdateQualityServiceShould
     {
         var items = new List<Item>
         {
-            new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80 }
+            new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 80 }
         };
 
         this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Sulfuras, Hand of Ragnaros", 0, 80);
+        AssertItemEqual(items[0], "Sulfuras, Hand of Ragnaros", 10, 80);
     }
 
     [Fact]
