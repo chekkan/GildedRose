@@ -9,7 +9,7 @@ public abstract class Product
     protected Product(string name, int sellIn, int quality) =>
         (Name, SellIn, Quality) = (name, sellIn, quality);
 
-    public void IncreaseQuality()
+    public virtual void IncreaseQuality()
     {
         if (Quality < 50)
         {
@@ -30,7 +30,7 @@ public abstract class Product
         Quality = 0;
     }
 
-    public void ForwardDay()
+    public virtual void ForwardDay()
     {
         SellIn = SellIn - 1;
     }
@@ -67,11 +67,28 @@ public sealed class BackstagePassItem : Product
 {
     public BackstagePassItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
     { }
+
+    public override void IncreaseQuality()
+    {
+        base.IncreaseQuality();
+        if (SellIn <= 10)
+        {
+            base.IncreaseQuality();
+        }
+
+        if (SellIn <= 5)
+        {
+            base.IncreaseQuality();
+        }
+    }
 }
 
 public sealed class LegendaryItem : Product
 {
     public LegendaryItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+
+    public override void ForwardDay()
     { }
 }
 
@@ -89,29 +106,13 @@ public class UpdateQualityService
         if (item is AgedBrieItem or BackstagePassItem)
         {
             item.IncreaseQuality();
-
-            if (item is BackstagePassItem)
-            {
-                if (item.SellIn <= 10)
-                {
-                    item.IncreaseQuality();
-                }
-
-                if (item.SellIn <= 5)
-                {
-                    item.IncreaseQuality();
-                }
-            }
         }
         else if (item is not LegendaryItem)
         {
             item.DegradeQuality();
         }
 
-        if (item is not LegendaryItem)
-        {
-            item.ForwardDay();
-        }
+        item.ForwardDay();
 
         if (item.SellIn < 0)
         {
