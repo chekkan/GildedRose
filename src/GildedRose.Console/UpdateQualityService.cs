@@ -9,6 +9,14 @@ public abstract class Product
     protected Product(string name, int sellIn, int quality) =>
         (Name, SellIn, Quality) = (name, sellIn, quality);
 
+    public void IncreaseQuality()
+    {
+        if (Quality < 50)
+        {
+            Quality = Quality + 1;
+        }
+    }
+
     public static Product Create(Item item)
     {
         switch (item.Name.ToLowerInvariant())
@@ -62,18 +70,18 @@ public class UpdateQualityService
     {
         if (item is AgedBrieItem or BackstagePassItem)
         {
-            IncreaseQuality(item);
+            item.IncreaseQuality();
 
             if (item is BackstagePassItem)
             {
                 if (item.SellIn <= 10)
                 {
-                    IncreaseQuality(item);
+                    item.IncreaseQuality();
                 }
 
                 if (item.SellIn <= 5)
                 {
-                    IncreaseQuality(item);
+                    item.IncreaseQuality();
                 }
             }
         }
@@ -91,7 +99,7 @@ public class UpdateQualityService
         {
             if (item is AgedBrieItem)
             {
-                IncreaseQuality(item);
+                item.IncreaseQuality();
             }
             else if (item is BackstagePassItem)
             {
@@ -103,14 +111,6 @@ public class UpdateQualityService
             }
         }
         return new Item { Name = item.Name, SellIn = item.SellIn, Quality = item.Quality };
-    }
-
-    private static void IncreaseQuality(Product item)
-    {
-        if (item.Quality < 50)
-        {
-            item.Quality = item.Quality + 1;
-        }
     }
 
     private static void DegradeQuality(Product item)
