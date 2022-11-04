@@ -4,11 +4,11 @@ namespace GildedRose.Console;
 
 public class UpdateQualityService
 {
-    public void Update(IList<Item> items)
+    public void Update(IEnumerable<Item> items)
     {
-        for (var i = 0; i < items.Count; i++)
+        foreach (var item in items)
         {
-            UpdateItem(items[i]);
+            UpdateItem(item);
         }
     }
 
