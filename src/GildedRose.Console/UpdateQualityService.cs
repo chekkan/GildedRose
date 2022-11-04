@@ -50,16 +50,16 @@ public class UpdateQualityService
             }
             else
             {
-                if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
+                if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                {
+                    item.Quality = item.Quality - item.Quality;
+                }
+                else
                 {
                     if (item.Name != "Sulfuras, Hand of Ragnaros")
                     {
                         DegradeQuality(item);
                     }
-                }
-                else
-                {
-                    item.Quality = item.Quality - item.Quality;
                 }
             }
         }
