@@ -1,23 +1,70 @@
 namespace GildedRose.Console;
 
+public abstract class Product
+{
+    public string Name { get; }
+    public int SellIn { get; set; }
+    public int Quality { get; set; }
+
+    protected Product(string name, int sellIn, int quality) =>
+        (Name, SellIn, Quality) = (name, sellIn, quality);
+
+    public static Product Create(Item item)
+    {
+        switch (item.Name.ToLowerInvariant())
+        {
+            case "aged brie":
+                return new AgedBrieItem(item.Name, item.SellIn, item.Quality);
+            case "backstage passes to a tafkal80etc concert":
+                return new BackstagePassItem(item.Name, item.SellIn, item.Quality);
+            case "sulfuras, hand of ragnaros":
+                return new LegendaryItem(item.Name, item.SellIn, item.Quality);
+            default:
+                return new RegularItem(item.Name, item.SellIn, item.Quality);
+        }
+    }
+}
+
+public sealed class RegularItem : Product
+{
+    public RegularItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+}
+
+public sealed class AgedBrieItem : Product
+{
+    public AgedBrieItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+}
+
+public sealed class BackstagePassItem : Product
+{
+    public BackstagePassItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+}
+
+public sealed class LegendaryItem : Product
+{
+    public LegendaryItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+}
+
 public class UpdateQualityService
 {
     public IEnumerable<Item> Update(IEnumerable<Item> items)
     {
-        foreach (var item in items)
-        {
-            UpdateItem(item);
-        }
-        return items;
+        return items
+            .Select(Product.Create)
+            .Select(x => UpdateItem(x));
     }
 
-    private static void UpdateItem(Item item)
+    private static Item UpdateItem(Product item)
     {
-        if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+        if (item is AgedBrieItem or BackstagePassItem)
         {
             IncreaseQuality(item);
 
-            if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            if (item is BackstagePassItem)
             {
                 if (item.SellIn <= 10)
                 {
@@ -30,34 +77,35 @@ public class UpdateQualityService
                 }
             }
         }
-        else if (item.Name != "Sulfuras, Hand of Ragnaros")
+        else if (item is not LegendaryItem)
         {
             DegradeQuality(item);
         }
 
-        if (item.Name != "Sulfuras, Hand of Ragnaros")
+        if (item is not LegendaryItem)
         {
             item.SellIn = item.SellIn - 1;
         }
 
         if (item.SellIn < 0)
         {
-            if (item.Name == "Aged Brie")
+            if (item is AgedBrieItem)
             {
                 IncreaseQuality(item);
             }
-            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            else if (item is BackstagePassItem)
             {
                 DropQuality(item);
             }
-            else if (item.Name != "Sulfuras, Hand of Ragnaros")
+            else if (item is not LegendaryItem)
             {
                 DegradeQuality(item);
             }
         }
+        return new Item { Name = item.Name, SellIn = item.SellIn, Quality = item.Quality };
     }
 
-    private static void IncreaseQuality(Item item)
+    private static void IncreaseQuality(Product item)
     {
         if (item.Quality < 50)
         {
@@ -65,7 +113,7 @@ public class UpdateQualityService
         }
     }
 
-    private static void DegradeQuality(Item item)
+    private static void DegradeQuality(Product item)
     {
         if (item.Quality > 0)
         {
@@ -73,7 +121,7 @@ public class UpdateQualityService
         }
     }
 
-    private static void DropQuality(Item item)
+    private static void DropQuality(Product item)
     {
         item.Quality = item.Quality - item.Quality;
     }
