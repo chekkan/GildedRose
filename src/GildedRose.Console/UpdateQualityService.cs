@@ -17,6 +17,19 @@ public abstract class Product
         }
     }
 
+    public void DegradeQuality()
+    {
+        if (Quality > 0)
+        {
+            Quality = Quality - 1;
+        }
+    }
+
+    public void DropQuality()
+    {
+        Quality = 0;
+    }
+
     public static Product Create(Item item)
     {
         switch (item.Name.ToLowerInvariant())
@@ -87,7 +100,7 @@ public class UpdateQualityService
         }
         else if (item is not LegendaryItem)
         {
-            DegradeQuality(item);
+            item.DegradeQuality();
         }
 
         if (item is not LegendaryItem)
@@ -103,26 +116,13 @@ public class UpdateQualityService
             }
             else if (item is BackstagePassItem)
             {
-                DropQuality(item);
+                item.DropQuality();
             }
             else if (item is not LegendaryItem)
             {
-                DegradeQuality(item);
+                item.DegradeQuality();
             }
         }
         return new Item { Name = item.Name, SellIn = item.SellIn, Quality = item.Quality };
-    }
-
-    private static void DegradeQuality(Product item)
-    {
-        if (item.Quality > 0)
-        {
-            item.Quality = item.Quality - 1;
-        }
-    }
-
-    private static void DropQuality(Product item)
-    {
-        item.Quality = item.Quality - item.Quality;
     }
 }
