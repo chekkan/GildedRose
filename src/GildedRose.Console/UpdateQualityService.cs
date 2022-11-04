@@ -2,12 +2,13 @@ namespace GildedRose.Console;
 
 public class UpdateQualityService
 {
-    public void Update(IEnumerable<Item> items)
+    public IEnumerable<Item> Update(IEnumerable<Item> items)
     {
         foreach (var item in items)
         {
             UpdateItem(item);
         }
+        return items;
     }
 
     private static void UpdateItem(Item item)

@@ -35,7 +35,7 @@ class Program
 
     public void UpdateQuality()
     {
-        new UpdateQualityService().Update(Items);
+        Items = new UpdateQualityService().Update(Items).ToList();
     }
 }
 

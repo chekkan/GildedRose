@@ -1,5 +1,6 @@
 using GildedRose.Console;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace GildedRose.Tests;
@@ -21,9 +22,9 @@ public class UpdateQualityServiceShould
             new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 80 }
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Sulfuras, Hand of Ragnaros", 10, 80);
+        AssertItemEqual(result.First(), "Sulfuras, Hand of Ragnaros", 10, 80);
     }
 
     [Fact]
@@ -34,9 +35,9 @@ public class UpdateQualityServiceShould
             new Item { Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20 }
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "+5 Dexterity Vest", 9, 19);
+        AssertItemEqual(result.First(), "+5 Dexterity Vest", 9, 19);
     }
 
     [Theory]
@@ -51,9 +52,9 @@ public class UpdateQualityServiceShould
             new Item { Name = name, SellIn = sellIn, Quality = quality }
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], name, sellIn - 1, 0);
+        AssertItemEqual(result.First(), name, sellIn - 1, 0);
     }
 
     [Fact]
@@ -64,9 +65,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Aged Brie", SellIn = 2, Quality = 0}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Aged Brie", 1, 1);
+        AssertItemEqual(result.First(), "Aged Brie", 1, 1);
     }
 
     [Fact]
@@ -77,9 +78,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Aged Brie", SellIn = 2, Quality = 50}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Aged Brie", 1, 50);
+        AssertItemEqual(result.First(), "Aged Brie", 1, 50);
     }
 
     [Theory]
@@ -94,9 +95,9 @@ public class UpdateQualityServiceShould
             new Item {Name = name, SellIn = sellIn, Quality = quality}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], name, sellIn - 1, quality - 2);
+        AssertItemEqual(result.First(), name, sellIn - 1, quality - 2);
     }
 
     [Fact]
@@ -107,9 +108,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 11, Quality = 0}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Backstage passes to a TAFKAL80ETC concert", 10, 1);
+        AssertItemEqual(result.First(), "Backstage passes to a TAFKAL80ETC concert", 10, 1);
     }
 
     [Theory]
@@ -125,9 +126,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = sellIn, Quality = quality}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
+        AssertItemEqual(result.First(), "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
     }
 
     [Theory]
@@ -143,9 +144,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = sellIn, Quality = quality}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
+        AssertItemEqual(result.First(), "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
     }
 
     [Theory]
@@ -160,9 +161,9 @@ public class UpdateQualityServiceShould
             new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = sellIn, Quality = quality}
         };
 
-        this.sut.Update(items);
+        var result = this.sut.Update(items);
 
-        AssertItemEqual(items[0], "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
+        AssertItemEqual(result.First(), "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
     }
 
     private static void AssertItemEqual(Item item, string name, int sellIn, int quality)
