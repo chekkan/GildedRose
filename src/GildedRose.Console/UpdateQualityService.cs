@@ -3,8 +3,8 @@ namespace GildedRose.Console;
 public abstract class Product
 {
     public string Name { get; }
-    public int SellIn { get; set; }
-    public int Quality { get; set; }
+    public int SellIn { get; private set; }
+    public int Quality { get; private set; }
 
     protected Product(string name, int sellIn, int quality) =>
         (Name, SellIn, Quality) = (name, sellIn, quality);
@@ -28,6 +28,11 @@ public abstract class Product
     public void DropQuality()
     {
         Quality = 0;
+    }
+
+    public void ForwardDay()
+    {
+        SellIn = SellIn - 1;
     }
 
     public static Product Create(Item item)
@@ -105,7 +110,7 @@ public class UpdateQualityService
 
         if (item is not LegendaryItem)
         {
-            item.SellIn = item.SellIn - 1;
+            item.ForwardDay();
         }
 
         if (item.SellIn < 0)
