@@ -24,18 +24,12 @@ public class UpdateQualityService
                 {
                     if (item.SellIn <= 10)
                     {
-                        if (item.Quality < 50)
-                        {
-                            item.Quality = item.Quality + 1;
-                        }
+                        IncreaseQuality(item);
                     }
 
                     if (item.SellIn <= 5)
                     {
-                        if (item.Quality < 50)
-                        {
-                            item.Quality = item.Quality + 1;
-                        }
+                        IncreaseQuality(item);
                     }
                 }
             }
@@ -77,11 +71,16 @@ public class UpdateQualityService
             }
             else
             {
-                if (item.Quality < 50)
-                {
-                    item.Quality = item.Quality + 1;
-                }
+                IncreaseQuality(item);
             }
+        }
+    }
+
+    private static void IncreaseQuality(Item item)
+    {
+        if (item.Quality < 50)
+        {
+            item.Quality = item.Quality + 1;
         }
     }
 }
