@@ -29,12 +29,9 @@ public class UpdateQualityService
                 }
             }
         }
-        else
+        else if (item.Name != "Sulfuras, Hand of Ragnaros")
         {
-            if (item.Name != "Sulfuras, Hand of Ragnaros")
-            {
-                DegradeQuality(item);
-            }
+            DegradeQuality(item);
         }
 
         if (item.Name != "Sulfuras, Hand of Ragnaros")
@@ -48,19 +45,13 @@ public class UpdateQualityService
             {
                 IncreaseQuality(item);
             }
-            else
+            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
             {
-                if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    item.Quality = item.Quality - item.Quality;
-                }
-                else
-                {
-                    if (item.Name != "Sulfuras, Hand of Ragnaros")
-                    {
-                        DegradeQuality(item);
-                    }
-                }
+                DropQuality(item);
+            }
+            else if (item.Name != "Sulfuras, Hand of Ragnaros")
+            {
+                DegradeQuality(item);
             }
         }
     }
@@ -79,5 +70,10 @@ public class UpdateQualityService
         {
             item.Quality = item.Quality - 1;
         }
+    }
+
+    private static void DropQuality(Item item)
+    {
+        item.Quality = item.Quality - item.Quality;
     }
 }
