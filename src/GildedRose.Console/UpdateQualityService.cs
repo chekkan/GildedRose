@@ -13,19 +13,14 @@ public abstract class Product
 
     public static Product Create(Item item)
     {
-        switch (item.Name.ToLowerInvariant())
+        return item.Name.ToLowerInvariant() switch
         {
-            case "aged brie":
-                return new AgedBrie(item.Name, item.SellIn, item.Quality);
-            case "backstage passes to a tafkal80etc concert":
-                return new BackstagePass(item.Name, item.SellIn, item.Quality);
-            case "sulfuras, hand of ragnaros":
-                return new LegendaryItem(item.Name, item.SellIn);
-            case "conjured mana cake":
-                return new ConjuredItem(item.Name, item.SellIn, item.Quality);
-            default:
-                return new RegularItem(item.Name, item.SellIn, item.Quality);
-        }
+            var name when name.StartsWith("aged brie") => new AgedBrie(item.Name, item.SellIn, item.Quality),
+            var name when name.StartsWith("backstage passes") => new BackstagePass(item.Name, item.SellIn, item.Quality),
+            var name when name.StartsWith("sulfuras") => new LegendaryItem(item.Name, item.SellIn),
+            var name when name.StartsWith("conjured") => new ConjuredItem(item.Name, item.SellIn, item.Quality),
+            _ => new RegularItem(item.Name, item.SellIn, item.Quality)
+        };
     }
 }
 
