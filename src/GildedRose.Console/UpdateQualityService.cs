@@ -9,7 +9,7 @@ public abstract class Product
     protected Product(string name, int sellIn, int quality) =>
         (Name, SellIn, Quality) = (name, sellIn, quality);
 
-    public virtual void IncreaseQuality()
+    public void IncreaseQuality()
     {
         if (Quality < 50)
         {
@@ -30,10 +30,12 @@ public abstract class Product
         Quality = 0;
     }
 
-    public virtual void ForwardDay()
+    public void ForwardDay()
     {
         SellIn = SellIn - 1;
     }
+
+    public abstract Product NextDay();
 
     public static Product Create(Item item)
     {
@@ -55,12 +57,36 @@ public sealed class RegularItem : Product
 {
     public RegularItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
     { }
+
+    public override Product NextDay()
+    {
+        var result = new RegularItem(Name, SellIn, Quality);
+        result.DegradeQuality();
+        result.ForwardDay();
+        if (result.SellIn < 0)
+        {
+            result.DegradeQuality();
+        }
+        return result;
+    }
 }
 
 public sealed class AgedBrieItem : Product
 {
     public AgedBrieItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
     { }
+
+    public override Product NextDay()
+    {
+        var result = new AgedBrieItem(Name, SellIn, Quality);
+        result.IncreaseQuality();
+        result.ForwardDay();
+        if (result.SellIn < 0)
+        {
+            result.IncreaseQuality();
+        }
+        return result;
+    }
 }
 
 public sealed class BackstagePassItem : Product
@@ -68,18 +94,26 @@ public sealed class BackstagePassItem : Product
     public BackstagePassItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
     { }
 
-    public override void IncreaseQuality()
+    public override Product NextDay()
     {
-        base.IncreaseQuality();
-        if (SellIn <= 10)
+        var result = new BackstagePassItem(Name, SellIn, Quality);
+        result.IncreaseQuality();
+        if (result.SellIn <= 10)
         {
-            base.IncreaseQuality();
+            result.IncreaseQuality();
         }
 
-        if (SellIn <= 5)
+        if (result.SellIn <= 5)
         {
-            base.IncreaseQuality();
+            result.IncreaseQuality();
         }
+        result.ForwardDay();
+
+        if (result.SellIn < 0)
+        {
+            result.DropQuality();
+        }
+        return result;
     }
 }
 
@@ -88,8 +122,8 @@ public sealed class LegendaryItem : Product
     public LegendaryItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
     { }
 
-    public override void ForwardDay()
-    { }
+    public override Product NextDay() =>
+        new LegendaryItem(Name, SellIn, Quality);
 }
 
 public class UpdateQualityService
@@ -103,32 +137,7 @@ public class UpdateQualityService
 
     private static Item UpdateItem(Product item)
     {
-        if (item is AgedBrieItem or BackstagePassItem)
-        {
-            item.IncreaseQuality();
-        }
-        else if (item is not LegendaryItem)
-        {
-            item.DegradeQuality();
-        }
-
-        item.ForwardDay();
-
-        if (item.SellIn < 0)
-        {
-            if (item is AgedBrieItem)
-            {
-                item.IncreaseQuality();
-            }
-            else if (item is BackstagePassItem)
-            {
-                item.DropQuality();
-            }
-            else if (item is not LegendaryItem)
-            {
-                item.DegradeQuality();
-            }
-        }
-        return new Item { Name = item.Name, SellIn = item.SellIn, Quality = item.Quality };
+        var itemNextDay = item.NextDay();
+        return new Item { Name = itemNextDay.Name, SellIn = itemNextDay.SellIn, Quality = itemNextDay.Quality };
     }
 }
