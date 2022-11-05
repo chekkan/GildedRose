@@ -21,6 +21,8 @@ public abstract class Product
                 return new BackstagePass(item.Name, item.SellIn, item.Quality);
             case "sulfuras, hand of ragnaros":
                 return new LegendaryItem(item.Name, item.SellIn);
+            case "conjured mana cake":
+                return new ConjuredItem(item.Name, item.SellIn, item.Quality);
             default:
                 return new RegularItem(item.Name, item.SellIn, item.Quality);
         }
@@ -40,6 +42,22 @@ public sealed class RegularItem : Product
             _ => Quality - 1
         };
         return new RegularItem(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
+    }
+}
+
+public sealed class ConjuredItem : Product
+{
+    public ConjuredItem(string name, int sellIn, int quality) : base(name, sellIn, quality)
+    { }
+
+    public override Product NextDay()
+    {
+        var quality = SellIn switch
+        {
+            <= 0 => Quality - 4,
+            _ => Quality - 2
+        };
+        return new ConjuredItem(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
     }
 }
 

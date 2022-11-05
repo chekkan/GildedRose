@@ -166,6 +166,23 @@ public class UpdateQualityServiceShould
         AssertItemEqual(result.First(), "Backstage passes to a TAFKAL80ETC concert", sellIn - 1, expectedQuality);
     }
 
+    [Theory]
+    [InlineData(3, 6, 4)]
+    [InlineData(0, 6, 2)]
+    public void Conjured_items_degrade_in_Quality_twice_as_fast_as_normal_items(
+        int sellIn, int quality, int expectedQuality
+    )
+    {
+        var items = new List<Item>
+        {
+            new Item {Name = "Conjured Mana Cake", SellIn = sellIn, Quality = quality}
+        };
+
+        var result = this.sut.Update(items);
+
+        AssertItemEqual(result.First(), "Conjured Mana Cake", sellIn - 1, expectedQuality);
+    }
+
     private static void AssertItemEqual(Item item, string name, int sellIn, int quality)
     {
         Assert.Equal(name, item.Name);
