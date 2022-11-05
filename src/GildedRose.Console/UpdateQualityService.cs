@@ -7,13 +7,12 @@ public abstract class Product
     public int Quality { get; }
 
     public Product(string name, int sellIn, int quality) =>
-        (Name, SellIn, Quality) = (name, sellIn, quality);
+        (Name, SellIn, Quality) = (name, sellIn, Math.Max(0, quality));
 
     public abstract Product NextDay();
 
-    public static Product Create(Item item)
-    {
-        return item.Name.ToLowerInvariant() switch
+    public static Product Create(Item item) =>
+        item.Name.ToLowerInvariant() switch
         {
             var name when name.StartsWith("aged brie") => new AgedBrie(item.Name, item.SellIn, item.Quality),
             var name when name.StartsWith("backstage passes") => new BackstagePass(item.Name, item.SellIn, item.Quality),
@@ -21,7 +20,6 @@ public abstract class Product
             var name when name.StartsWith("conjured") => new ConjuredItem(item.Name, item.SellIn, item.Quality),
             _ => new RegularItem(item.Name, item.SellIn, item.Quality)
         };
-    }
 }
 
 public sealed class RegularItem : Product
@@ -36,7 +34,7 @@ public sealed class RegularItem : Product
             <= 0 => Quality - 2,
             _ => Quality - 1
         };
-        return new RegularItem(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
+        return new RegularItem(Name, SellIn - 1, Math.Min(quality, 50));
     }
 }
 
@@ -52,7 +50,7 @@ public sealed class ConjuredItem : Product
             <= 0 => Quality - 4,
             _ => Quality - 2
         };
-        return new ConjuredItem(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
+        return new ConjuredItem(Name, SellIn - 1, Math.Min(quality, 50));
     }
 }
 
@@ -68,7 +66,7 @@ public sealed class AgedBrie : Product
             <= 0 => Quality + 2,
             _ => Quality + 1
         };
-        return new AgedBrie(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
+        return new AgedBrie(Name, SellIn - 1, Math.Min(quality, 50));
     }
 }
 
@@ -86,7 +84,7 @@ public sealed class BackstagePass : Product
             <= 10 => Quality + 2,
             _ => Quality + 1
         };
-        return new BackstagePass(Name, SellIn - 1, Math.Min(Math.Max(0, quality), 50));
+        return new BackstagePass(Name, SellIn - 1, Math.Min(quality, 50));
     }
 }
 
